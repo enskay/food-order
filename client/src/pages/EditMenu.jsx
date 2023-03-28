@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getBurgerById } from "../actions/burgerActions";
+import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import { editBurgerAction, getBurgerById } from "../actions/burgerActions";
 
 function EditMenu() {
   const dispatch = useDispatch();
   const { burgerid } = useParams();
-
+  console.log(burgerid);
   const getburgersbyidstate = useSelector(
     (state) => state.getBurgerByIdReducer
   );
@@ -21,12 +22,37 @@ function EditMenu() {
   const [desc, setDesc] = useState("");
   const [category, setCategory] = useState("et");
 
+  const navigate = useNavigate();
+
   const formHandler = (e) => {
     e.preventDefault();
+
+    const editedBurger = {
+      _id: burgerid,
+      ad: ad,
+      img: img,
+      desc: desc,
+      fiyat: {
+        small: smallPrice,
+        medium: mediumPrice,
+        mega: megaPrice,
+      },
+      kategori: category,
+    };
+
+    dispatch(editBurgerAction(editedBurger));
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Menü Güncelleme Başarılı",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+    navigate("/admin/menulist");
   };
 
   useEffect(() => {
-    if (burger._id == burgerid) {
+    if (burgerid == burger?._id) {
       setAd(burger.ad);
       setCategory(burger.kategori);
       setDesc(burger.desc);
@@ -37,7 +63,7 @@ function EditMenu() {
     } else {
       dispatch(getBurgerById(burgerid));
     }
-  }, []);
+  }, [burger]);
   return (
     <div>
       <form className="w-75 m-auto abz" onSubmit={formHandler}>

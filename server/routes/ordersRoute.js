@@ -1,9 +1,9 @@
-const stripe = require("stripe")(
-  "sk_test_51MoobJLceYkLVhIGCmTgIsLNXXp3GlPP24NrOgmo0Zq4sRBmiM3Vb0gIJfwt6XGR06gI57CDKfhF6n5XTupZ9hW400iuaQ4aCO"
-);
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();
+const stripe = require("stripe")(
+  "sk_test_51MV9VIAEY249VO0ytdJflCM58bJdALVUF7Jp4WQka9EAzE0d3FP2Kjg9zQGUsgU76qt99jM9X63DPl7awtIlIhCu00JnmKG2sB"
+);
 const { v4: uuidv4 } = require("uuid");
 
 const cors = require("cors");
@@ -68,6 +68,30 @@ router.post("/getusersorders", async (req, res) => {
     res.send(orders);
   } catch (error) {
     res.status(400).json({ message: "Siparişlere Erişilemiyor" });
+  }
+});
+
+//GET ALL ORDERs SERVİSİ
+router.get("/getAllOrders", async (req, res) => {
+  try {
+    const orders = await OrderModel.find({});
+    res.send(orders);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//deliver post işlemi
+router.post("/deliverOrder", async (req, res) => {
+  const orderid = req.body.orderid;
+
+  try {
+    const order = await OrderModel.findOne({ _id: orderid });
+    order.isDelivered = true;
+    await order.save();
+    res.send("Sipariş Başarıyla Teslim Edildi");
+  } catch (error) {
+    res.status(400).json({ message: "Siparişlere Erişilemiyor", error });
   }
 });
 

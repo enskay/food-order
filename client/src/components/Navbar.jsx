@@ -11,8 +11,8 @@ function Navbar() {
 
   const dispatch = useDispatch();
 
-  const logoutHandler = () => {
-    dispatch(logoutUserAction());
+  const logoutHandler = async () => {
+    await dispatch(logoutUserAction());
   };
   return (
     <div>
@@ -58,9 +58,9 @@ function Navbar() {
                       </Link>
                     </li>
                     <li>
-                      <Link className="dropdown-item" onClick={logoutHandler}>
+                      <a className="dropdown-item" onClick={logoutHandler}>
                         Logout
-                      </Link>
+                      </a>
                     </li>
                   </ul>
                 </div>

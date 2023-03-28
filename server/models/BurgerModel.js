@@ -15,4 +15,5 @@ const burgerSchema = new mongoose.Schema(
 );
 
 const burgerModel = mongoose.model("foods", burgerSchema);
+
 module.exports = burgerModel;
